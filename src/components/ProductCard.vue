@@ -9,36 +9,19 @@
   </template>
   
   <script>
-  /**
-   * @typedef {Object} Product
-   * @property {number|string} id - The unique identifier of the product
-   * @property {string} title - The title of the product
-   * @property {string} [description] - The description of the product
-   * @property {number} price - The price of the product
-   * @property {string} [image] - The URL of the product image
-   */
-  
-  /**
-   * ProductCard component
-   * Displays a card with basic information about a product
-   * @vue-component
-   */
+ 
   export default {
     name: 'ProductCard',
     props: {
-      /**
-       * The product object to display in the card
-       * @type {Product}
-       */
+   
       product: {
         type: Object,
         required: true
       }
     },
     methods: {
-      /**
-       * Navigates to the detailed view of the product
-       */
+     
+     
       goToDetail() {
         this.$router.push(`/product/${this.product.id}`);
       }
