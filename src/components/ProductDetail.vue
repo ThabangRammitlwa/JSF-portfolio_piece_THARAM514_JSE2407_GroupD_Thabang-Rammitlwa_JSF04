@@ -17,7 +17,9 @@
         <p>Price: ${{ productDetail.price }}</p>
         <p>Category: {{ productDetail.category }}</p>
         <p>Rating: {{ productDetail.rating.rate }} ({{ productDetail.rating.count }} reviews)</p>
-        <button @click="addToCart">Add to Cart</button>
+        <button @click="addToCart" class="add-to-cart-button">
+      <i class="fa fa-shopping-cart"></i>
+    </button>
       </div>
     </div>
   </div>
@@ -57,8 +59,8 @@ export default {
 </script>
 
 <style scoped>
-.container{
-  background-color: rgb(227, 236, 236); ;
+.container {
+  background-color: var(--container-background);
 }
 
 .back {
@@ -69,16 +71,16 @@ export default {
 }
 
 .product-detail {
-  border-radius: 20px solid;
+  border-radius: 20px;
   display: flex;
   align-items: flex-start;
   padding: 50px;
   gap: 50px;
+  background-color: var(--product-detail-background); 
+  color: var(--text-color); 
 }
-
 .image-container {
   flex: 0 0 auto;
- 
 }
 
 .content-container {
@@ -94,15 +96,17 @@ img {
 
 h2 {
   margin-top: 0;
+  color: var(--heading-color); 
 }
 
 p {
   margin-bottom: 1rem;
   max-width: 600px;
+  color: var(--text-color); 
 }
 
 p:nth-of-type(2) {
-  color: green;
+  color: var(--highlight-color);
   font-size: 20px;
 }
 
@@ -111,9 +115,10 @@ p:nth-of-type(4) {
 }
 
 button {
-  background-color: #02283f;
-  color: white;
+  background-color: var(--button-background);
+  color: var(--button-text-color);
   border: solid;
+  border-color: var(--button-border-color);
   border-radius: 5px;
   font-size: medium;
   padding: 10px 20px;
@@ -125,5 +130,28 @@ button {
     justify-content: center;
     margin-bottom: 10px;
   }
+}
+
+
+:root {
+  --container-background: rgb(227, 236, 236);
+  --product-detail-background: #fff;
+  --text-color: #000;
+  --heading-color: #02283f;
+  --highlight-color: green;
+  --button-background: #02283f;
+  --button-text-color: #fff;
+  --button-border-color: #02283f;
+}
+
+body.dark-mode :root {
+  --container-background: #1e1e1e;
+  --product-detail-background: #333;
+  --text-color: #fff;
+  --heading-color: #66b2ff;
+  --highlight-color: #00ff00;
+  --button-background: #555;
+  --button-text-color: #fff;
+  --button-border-color: #555;
 }
 </style>

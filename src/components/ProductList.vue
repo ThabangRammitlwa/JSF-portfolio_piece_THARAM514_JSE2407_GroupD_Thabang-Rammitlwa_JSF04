@@ -47,6 +47,7 @@ export default {
 };
 </script>
 
+
 <style scoped>
 .product-grid {
   display: grid;
@@ -54,36 +55,15 @@ export default {
   gap: 20px;
   width: 100%;
   padding: 20px;
+  background-color: var(--grid-background); 
+  color: var(--text-color); 
 }
 
 select {
   margin: 10px;
-}
-
-@media (max-width: 768px) {
-  .product-grid {
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-  }
-}
-</style>
-
-
-<style scoped>
-.container{
-  background-color: rgb(227, 236, 236);
-}
-
-
-.product-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 20px;
-  width: 100%;
-  padding: 20px;
-}
-
-select {
-  margin: 10px;
+  background-color: var(--select-background); 
+  color: var(--text-color); 
+  border: 1px solid var(--border-color); 
 }
 
 @media (max-width: 768px) {
@@ -92,4 +72,19 @@ select {
   }
 }
 
+
+:root {
+  --grid-background: #fff;
+  --text-color: #000;
+  --select-background: #f0f0f0;
+  --border-color: #ccc;
+}
+
+body.dark-mode :root {
+  --grid-background: #1e1e1e;
+  --text-color: #fff;
+  --select-background: #333;
+  --border-color: #444;
+}
 </style>
+
