@@ -1,116 +1,140 @@
 
 <template>
     <header class="header">
-        <div class="container flex flex-center">
-          <h1 class="logo">1.Stop-Store</h1>
-          <nav>
+      <div class="container flex flex-center">
+        <h1 class="logo">1.Stop-Store</h1>
+        <nav>
           <ul class="nav-list flex">
-            <input v-model="searchQuery" @keyup.enter="search" placeholder="Search...">
-            <button @click="search">Search</button>
+            <input v-model="searchQuery" @keyup.enter="searchProducts" placeholder="Search..." />
+            <button @click="searchProducts">Search</button>
             <router-link to="/" title="Home">
               <i class="fas fa-home"></i>
             </router-link>
             <router-link to="/products" title="Shop">
               <i class="fas fa-store"></i>
             </router-link>
+            <router-link to="/wishlist" title="Wishlist">
+            <i class="fas fa-heart"></i>
+          </router-link>
             <router-link to="/cart" class="Cart-icon">
               <i class="fas fa-shopping-cart"></i>
-            ({{ cartItemCount }})
+              ({{ cartItemCount }})
+            </router-link>
+            <router-link to="/comparison" title="Comparison">
+            <i class="fas fa-exchange-alt"></i>
           </router-link>
-          <li v-if="isAuthenticated">
-            <a href="#" @click.prevent="logout">Logout</a>
-          </li>
-          <li v-else>
-            <a href="#" @click.prevent="showLoginModal">Login</a>
-          </li>
-        </ul>
+            <li v-if="isAuthenticated">
+              <a href="#" @click.prevent="logout">Logout</a>
+            </li>
+            <li v-else>
+              <a href="#" @click.prevent="showLoginModal">Login</a>
+            </li>
+          </ul>
         </nav>
-        </div>
-        <LoginModal v-if="showLogin" @close="showLogin = false" />
+      </div>
+      <LoginModal v-if="showLogin" @close="showLogin = false" />
     </header>
   </template>
-
-<script>
-
-export default {
+  
+  <script>
+  import { mapGetters, mapActions } from 'vuex';
+  import LoginModal from '../components/LoginModal.vue'
+  
+  export default {
     name: 'Header',
+    components: {
+      LoginModal,
+    },
     data() {
-        return {
-            searchQuery: '',
-        };
+      return {
+        searchQuery: '',
+        showLogin: false,
+      };
     },
     computed: {
-        cartItemCount() {
-
-        }
+        ...mapGetters('auth', ['isAuthenticated']),  ...mapActions('auth', ['logout']), 
+      ...mapGetters('cart', ['cartItemCount']),
+        ...mapGetters('wishlist',['wishlistItemCount']),
     },
-
     methods: {
-        searchProducts() {
-            console.log(this.searchQuery);
+      ...mapActions('auth', ['logout']), 
+      searchProducts() {
+        if (this.searchQuery.trim()) {
+          this.$router.push({ name: 'Products', query: { search: this.searchQuery } });
         }
-
-    }
-};
-</script>
-
-<style scoped>
-
-header{
-    background-color: #000;
-    color: #fff;
-    padding: 10px 0;
+      },
+      showLoginModal() {
+        this.showLogin = true;
+      },
+      logout() { 
+        this.$store.dispatch('logout'); 
+        this.$router.push('/login'); 
+      },
+    },
+  };
+  </script>
   
-}
-.logo{
-    font-size: 1.5rem;
-    margin-right: auto;
-}
-
-.nav-list {
-    list-style-type: none;
-    padding: 0;
-    display: flex;
-    align-items: center;
-  }
-
-  .nav-list li {
-    margin: 0 15px;
-  }
-
-  .nav-list a {
-    color: #f3f8f4;
-    font-size: 1.5em;
-    text-decoration: none;
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 40px;
-    height: 40px;
-  }
-
-  .nav-list a:hover {
-  color: #007bff;
-}
-
-.cart-count {
-  position: absolute;
-  top: -5px;
-  right: -5px;
-  background-color: #ff4444;
-  color: white;
-  border-radius: 50%;
-  padding: 2px 6px;
-  font-size: 0.7em;
-}
-
-@media (max-width: 768px) {
+  <style scoped>
   .header {
-    flex-direction: column;
+    width: 100%;
+    background-color: #333;
+    color: #fff;
+    box-sizing: border-box;
+   /* position: fixed;*/
+    top: 0;
+    left: 0;
+    z-index:1000;
+    height: 70px;
+  }
+  .container {
+  width: 100%; 
+  max-width: 1200px; 
+  margin: 0 auto; 
+  padding: 0 20px; 
+  box-sizing: border-box; 
+}
+  
+  .nav-list {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  
+  .nav-list a {
+    color: #fff;
+    text-decoration: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+  }
+  
+  .nav-list a:hover {
+    background-color: #555;
+  }
+  
+  .Cart-icon {
+    display: flex;
     align-items: center;
   }
-
+  
+  input[type="text"] {
+    padding: 5px;
+    margin-right: 10px;
+  }
+  
+  button {
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+  
+  body {
+  margin: 0; 
+  padding: 0;
+  box-sizing: border-box; 
+  }
+  main {
+  padding-top: 80px; 
 }
-
-</style>
+  </style>
+  

@@ -1,5 +1,12 @@
 import { createStore } from 'vuex';
 import { getProducts, getProduct, getCategories } from '../services/api';
+import auth from '../modules/auth';
+import product from '../modules/product';
+import cart from '../modules/cart';
+import comparison from '../modules/comparison';
+import wishlist from '../modules/wishlist';
+
+
 
 export default createStore({
   state: {
@@ -11,6 +18,15 @@ export default createStore({
     activeSort: 'default',
     productDetail: null,
   },
+    modules: {
+      auth,
+      cart,
+      comparison,
+      wishlist,
+      product
+
+    },
+  
   mutations: {
     setProducts(state, products) {
       state.products = products;

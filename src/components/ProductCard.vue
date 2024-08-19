@@ -15,6 +15,8 @@
   </template>
   
   <script>
+
+  import { mapGetters, mapActions } from 'vuex';
  
   export default {
     name: 'ProductCard',
@@ -33,14 +35,19 @@
   },
 
     methods: {
+      ...mapActions('cart', ['addToCart']),
+      ...mapActions('wishlist', [ 'addToWishlist']),
+
       goToDetail() {
         this.$router.push(`/product/${this.product.id}`);
       },
 
       addToWishlist() {
+      this.$store.dispatch('wishlist/addToWishlist', this.product); 
       this.isInWishlist = !this.isInWishlist;
       },
       addToCart() {
+      this.$store.dispatch('cart/addToCart', { product: this.product, quantity: 1 });
       this.isInCart = !this.isInCart;
     }
     }
@@ -69,12 +76,12 @@
   .fa {
     cursor: pointer;
     font-size: 20px;
-    color: var(--icon-color); /* Use a dynamic icon color */
+    color: var(--icon-color); 
     transition: color 0.3s;
   }
   
   .fa.active {
-    color: var(--active-icon-color); /* Active state color */
+    color: var(--active-icon-color); 
   }
   
   img {
@@ -93,7 +100,7 @@
     margin: 5px 0;
   }
   
-  /* Define CSS variables for theme support */
+
   :root {
     --card-background: #ffffff;
     --text-color: #000000;
@@ -105,7 +112,7 @@
     --card-background: #1e1e1e;
     --text-color: #ffffff;
     --icon-color: #aaaaaa;
-    --active-icon-color: #ff6347; /* Example active color for dark mode */
+    --active-icon-color: #ff6347; 
   }
   </style>
   

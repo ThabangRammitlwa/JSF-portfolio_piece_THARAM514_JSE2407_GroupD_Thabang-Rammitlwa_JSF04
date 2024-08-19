@@ -1,32 +1,50 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'; 
+import Welcome from '../components/Welcome.vue';
 import ProductList from '../components/ProductList.vue';
-import ProductCard from '../components/ProductCard.vue';
 import ProductDetails from '../components/ProductDetail.vue';
 import Login from '../components/Login.vue';
-import cart from '../modules/cart';
-import Comparison from '../components/Comparison.vue'
-
+import Cart from '../components/Cart.vue'; 
+import Comparison from '../components/Comparison.vue';
+import DiscountCarousel from '../components/DiscountCarousel.vue';
+import Wishlist from '../components/Wishlist.vue';
+import store from '../store';  
 
 const routes = [
-    { path: '/', component: ProductList },
-    { path: '/products', component:ProductCard},
-    { path: '/product/:id', component: ProductDetails, props: true },
-    { path: '/login', component: Login },
-    {path: '/cart',component: cart,beforeEnter: (to, from, next) => {
-          if (isLoggedIn()) {
-            next();
-          } else {
-            next('/login'); 
-          }
+    { path: '/', name: 'Welcome', component: Welcome },
+    { path: '/discount', name: 'DiscountCarousel', component: DiscountCarousel },
+    { path: '/products', name: 'ProductList', component: ProductList },
+    { path: '/product/:id', name: 'ProductDetails', component: ProductDetails, props: true },
+    { path: '/login', name: 'Login', component: Login },
+    { 
+      path: '/cart', name: 'Cart', component: Cart,
+      beforeEnter: (to, from, next) => {
+        if (store.getters['auth/isAuthenticated']) {  
+          next();
+        } else {
+          next('/login');  
         }
+      },
     },
-    {
-        path: '/comparison',
-        name: 'Comparison',
-        component: Comparison,
-        meta: { requiresAuth: true },
+    { 
+      path: '/comparison', name: 'Comparison', component: Comparison,
+      beforeEnter: (to, from, next) => {
+        if (store.getters['auth/isAuthenticated']) { 
+          next();
+        } else {
+          next('/login');  
+        }
+      },
     },
-    
+   {
+     path: '/wishlist', name: 'Wishlist', component: Wishlist,
+      beforeEnter: (to, from, next) => {
+        if (store.getters['auth/isAuthenticated']) {  
+          next();
+        } else {
+          next('/login');  
+        }
+      },
+    },
 ];
 
 const router = createRouter({
@@ -35,3 +53,4 @@ const router = createRouter({
 });
 
 export default router;
+
