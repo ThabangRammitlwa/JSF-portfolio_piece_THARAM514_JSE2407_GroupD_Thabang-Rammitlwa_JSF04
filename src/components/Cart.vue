@@ -29,15 +29,15 @@ import { mapGetters, mapActions } from 'vuex';
 
 export default {
   computed: {
-    ...mapGetters('cart', ['cartItems', 'cartItemCount', 'isInCart','totalCost']),
+    ...mapGetters('cart', ['cartItems', 'cartItemCount', 'isInCart', 'totalCost']),
   },
   methods: {
-    ...mapActions('cart', ['removeFromCart', 'addToWishlist', 'addToComparison', 'clearCart', 'addToCart','updateQuantity']),
-    
+    ...mapActions('cart', ['removeFromCart', 'addToWishlist', 'addToComparison', 'clearCart', 'addToCart', 'updateCartItemQuantity']),
+
     removeFromCartHandler(productId) {
       this.removeFromCart(productId);
     },
-    
+
     moveToWishlist(item) {
       this.addToWishlist(item);
       this.removeFromCartHandler(item.productId);
@@ -48,9 +48,13 @@ export default {
       this.removeFromCartHandler(item.productId);
     },
 
+    updateQuantity(payload) {
+      this.updateCartItemQuantity(payload);
+    },
+
     toggleCart(item) {
       if (this.isInCart(item.productId)) {
-        this.removeFromCartHandler(item.productId);
+        this.removeFromCart(item.productId);
       } else {
         this.addToCart({ product: item, quantity: 1 });
       }

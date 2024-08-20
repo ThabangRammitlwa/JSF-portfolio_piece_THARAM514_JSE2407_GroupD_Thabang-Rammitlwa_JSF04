@@ -1,47 +1,59 @@
 <template>
-    <div class="wishlist">
-      <h1>Your Wishlist</h1>
-      <div v-if="wishlistItems.length === 0">Your wishlist is empty</div>
-      <div v-else>
-        <div v-for="item in wishlistItems" :key="item.productId" class="wishlist-item">
-          <img v-if="item.image" :src="item.image" :alt="item.title" />
-          <div class="details">
-            <h2>{{ item.title || 'Unknown Product' }}</h2>
-            <p v-if="item.price">Price: ${{ item.price }}</p>
-            <button @click="removeFromWishlist(item.productId)">Remove from Wishlist</button>
-            <button @click="moveToCart(item)">Move to Cart</button>
-          </div>
-        </div>
-        <div class="wishlist-summary">
-          <p>Total Items: {{ wishlistItemCount }}</p>
-          <button @click="clearWishlist">Clear Wishlist</button>
+  <div class="wishlist">
+    <h1>Your Wishlist</h1>
+    <div v-if="sortedAndFilteredWishlistItems.length === 0">Your wishlist is empty</div>
+    <div v-else>
+      <div v-for="item in sortedAndFilteredWishlistItems" :key="item.productId" class="wishlist-item">
+        <img v-if="item.image" :src="item.image" :alt="item.title" />
+        <div class="details">
+          <h2>{{ item.title || 'Unknown Product' }}</h2>
+          <p v-if="item.price">Price: ${{ item.price }}</p>
+          <p v-if="item.description">{{ item.description }}</p>
+          <button @click="removeFromWishlist(item.Id)">Remove from Wishlist</button>
+          <button @click="moveToCart(item.id)">Move to Cart</button>
         </div>
       </div>
+      <div class="wishlist-summary">
+        <p>Total Items: {{ wishlistItemCount }}</p>
+        <button @click="clearWishlist">Clear Wishlist</button>
+      </div>
     </div>
-  </template>
+  </div>
+</template>
   
   <script>
   import { mapGetters, mapActions } from 'vuex';
   
+  
   export default {
     computed: {
       ...mapGetters('wishlist', ['wishlistItems', 'wishlistItemCount', 'isInWishlist']),
+      sortedAndFilteredWishlistItems() {
+        return this.wishlistItems.slice().sort((a, b) => {
+        }).filter(item => {
+          return item.price > 0;
+
+        });
+    }
     },
     methods: {
       ...mapActions('wishlist', ['removeFromWishlist', 'addToCart', 'clearWishlist', 'addToWishlist']),
       
-      removeFromWishlistHandler(productId) {
+    /*  removeFromWishlistHandler(productId) {
         this.removeFromWishlist(productId); // Calls the Vuex action, not the local method
       },
+      clearWishlistHandler() {
+      this.clearWishlist();
+    },
       
       moveToCart(item) {
         this.addToCart({ product: item, quantity: 1 });
         this.removeFromWishlistHandler(item.productId); // Using the correct method here
-      },
+      },*/
       
       toggleWishlist(item) {
-        if (this.isInWishlist(item.productId)) {
-          this.removeFromWishlistHandler(item.productId); // Using the correct method here
+        if (this.isInWishlist(item.Id)) {
+          this.removeFromWishlist(item.Id); // Using the correct method here
         } else {
           this.addToWishlist(item);
         }

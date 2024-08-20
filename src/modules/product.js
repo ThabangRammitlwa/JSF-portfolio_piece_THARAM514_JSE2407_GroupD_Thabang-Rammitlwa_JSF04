@@ -1,3 +1,4 @@
+// product.js
 import { getRandomFutureDate } from '../utils/dateHelpers';
 
 export default {
@@ -27,7 +28,7 @@ export default {
     },
   },
   actions: {
-    async fetchDiscountedProducts({ commit }) {
+    async fetchDiscountedProducts({ commit, dispatch }) {
       commit('SET_LOADING', true);
       try {
         const response = await fetch('https://fakestoreapi.com/products');
@@ -36,8 +37,7 @@ export default {
         }
         const products = await response.json();
         commit('SET_PRODUCTS', products);
-        // Additional logic to set discounted products
-        this.selectDiscountedProducts({ commit, state: { products } });
+        dispatch('selectDiscountedProducts');
       } catch (error) {
         commit('SET_ERROR', error.message);
       } finally {
@@ -66,23 +66,7 @@ export default {
       
       commit('SET_DISCOUNTED_PRODUCTS', discountedProducts);
     },
-    async fetchProductDetail({ commit }, productId) {
-      commit('SET_LOADING', true);
-      try {
-        const response = await fetch(`https://fakestoreapi.com/products/${productId}`); // Correct URL
-        if (!response.ok) {
-          throw new Error('Product not found');
-        }
-        const product = await response.json();
-        commit('SET_PRODUCT_DETAIL', product);
-      } catch (error) {
-        commit('SET_ERROR', error.message);
-      } finally {
-        commit('SET_LOADING', false);
-      }
-    },
   },
-  getters: {
-    // Add any required getters here
-  },
+  getters: {},
 };
+

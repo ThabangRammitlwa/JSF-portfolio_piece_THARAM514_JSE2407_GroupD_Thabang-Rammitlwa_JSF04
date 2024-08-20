@@ -1,7 +1,8 @@
 <template>
   <div v-if="loading">Loading...</div>
   <div v-else-if="error">{{ error }}</div>
-  <div v-else-if="productDetail" class="container">
+  <div v-else-if="productDetail">
+    <div class="container">
     <div class="back">
       <button @click="goBack">Back to Products</button>
     </div>
@@ -13,43 +14,18 @@
       <div class="content-container">
         <h2>{{ productDetail.title }}</h2>
         <p>Description: {{ productDetail.description }}</p>
-        <div class="price-section">
-          <p v-if="productDetail.discountPercentage" class="discount">
-            {{ productDetail.discountPercentage }}% OFF
-          </p>
-          <p class="price">
-            <span v-if="productDetail.discountedPrice" class="discounted-price">
-              ${{ productDetail.discountedPrice.toFixed(2) }}
-            </span>
-            <span :class="{ 'original-price': productDetail.discountedPrice }">
-              ${{ productDetail.price.toFixed(2) }}
-            </span>
-          </p>
-        </div>
-        <p v-if="productDetail.saleEndDate" class="sale-end">
-          Sale ends on: {{ formatDate(productDetail.saleEndDate) }}
-        </p>
+        <p>Price: ${{ productDetail.price }}</p>
         <p>Category: {{ productDetail.category }}</p>
         <p>Rating: {{ productDetail.rating.rate }} ({{ productDetail.rating.count }} reviews)</p>
-        <div class="action-buttons">
-          <button @click="handleAddToCart" class="action-button" :class="{ 'active': isInCart }">
-            <i class="fa fa-shopping-cart"></i> {{ isInCart ? 'In Cart' : 'Add to Cart' }}
-          </button>
-          <button @click="handleAddToWishlist" class="action-button" :class="{ 'active': isInWishlist }">
-            <i class="fa fa-heart"></i> {{ isInWishlist ? 'In Wishlist' : 'Add to Wishlist' }}
-          </button>
-          <button @click="handleAddToComparison" class="action-button" :class="{ 'active': isInComparison }">
-            <i class="fa fa-exchange-alt"></i> {{ isInComparison ? 'In Comparison' : 'Add to Comparison' }}
-          </button>
-        </div>
+        <button @click="addToCart">Add to Cart</button>
       </div>
     </div>
   </div>
+</div>
 </template>
 
 <script>
 import { mapState, mapActions } from 'vuex';
-import { formatDate } from '../utils/dateHelpers';
 
 export default {
   name: 'ProductDetails',
@@ -59,63 +35,32 @@ export default {
       required: true
     }
   },
-  data() {
-    return {
-      isInWishlist: false,
-      isInCart: false,
-      isInComparison: false
-    };
+  computed: {
+    ...mapState(['loading', 'error', 'productDetail'])
   },
- /* computed: {
-    ...mapState(['loading', 'error', 'productDetail']),
-    isInWishlist() {
-      return this.$store.getters['wishlist/isInWishlist'](this.productDetail?.id);
-    },
-    isInCart() {
-      return this.$store.getters['cart/isInCart'](this.productDetail?.id);
-    },
-    isInComparison() {
-      return this.$store.getters['comparison/isInComparison'](this.productDetail?.id);
-    }
-  },*/
   methods: {
-    ...mapActions('product', ['fetchProductDetail']),
-    ...mapActions('cart', ['addToCart']),
-    ...mapActions('wishlist', ['addToWishlist']),
-    ...mapActions('comparison', ['addToComparison']),
-    formatDate,
-    
+    ...mapActions('cart', ['addItemToCart']),
+    async addToCart() {
+      if (!this.isAuthenticated) {
+        this.$router.push({ name: 'login' });
+      } else {
+        await this.addItemToCart(this.product);
+      }
+    },
+
+    ...mapActions(['fetchProductDetail']),
+
     goBack() {
       this.$router.push('/products');
-    },
-    
-    async handleAddToCart() {
-      if (!this.productDetail) return;
-      await this.addToCart({ 
-        product: this.productDetail, 
-        quantity: 1,
-        price: this.productDetail.discountedPrice || this.productDetail.price
-      });
-      this.isInCart = true;
-    },
-    
-    async handleAddToWishlist() {
-      if (!this.productDetail) return;
-      await this.addToWishlist(this.productDetail);
-      this.isInWishlist = !this.isInWishlist;
-    },
-    
-    async handleAddToComparison() {
-      if (!this.productDetail) return;
-      await this.addToComparison(this.productDetail);
-      this.isInComparison = !this.isInComparison;
     }
   },
+  
   mounted() {
     this.fetchProductDetail(this.id);
   }
 };
 </script>
+
 
 <style scoped>
 .container {

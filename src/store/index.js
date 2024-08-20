@@ -8,6 +8,7 @@ import wishlist from '../modules/wishlist';
 
 export default createStore({
   state: {
+    namespaced:true,
     products: [],
     categories: [],
     loading: false,
@@ -52,6 +53,13 @@ export default createStore({
     },
     CLEAR_USER_ID(state) {
       state.userId = null;
+    },
+
+    updateCartItemQuantity(state, { productId, quantity }) {
+      const item = state.cartItems.find((item) => item.productId === productId);
+      if (item) {
+        item.quantity = quantity;
+      }
     },
 
   },
@@ -104,6 +112,10 @@ export default createStore({
       localStorage.removeItem('token');
       commit('CLEAR_USER_ID');
       this.$router.push('/');
+    },
+
+    updateCartItemQuantity({ commit }, { productId, quantity }) {
+      commit('updateCartItemQuantity', { productId, quantity });
     },
   },
   getters: {

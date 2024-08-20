@@ -73,45 +73,56 @@ export default {
 </script>
 
   <style scoped>
-  .header {
-    width: 100%;
-    background-color: #333;
-    color: #fff;
-    box-sizing: border-box;
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index:1000;
-    height: 70px;
-  }
-  .container {
-  width: 100%; 
-  max-width: 1200px; 
-  margin: 0 auto; 
-  padding: 0 20px; 
-  box-sizing: border-box; 
+ header {
+  background-color: #000;
+  color: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+}
+.header-left,
+.header-right {
+  display: flex;
+  align-items: center;
+}
+.header-left,
+.header-right {
+  display: flex;
+  align-items: center;
+}
+
+.header-right button {
+  background-color: #fff;
+  color: #000;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
 }
   
-  .nav-list {
-    list-style: none;
-    display: flex;
-    align-items: center;
-    gap: 20px;
-  }
+nav {
+  background-color: #f9f9f9;
+  border-bottom: 1px solid #ddd;
+  padding: 10px 20px;
+}
   
-  .nav-list a {
-    color: #fff;
-    text-decoration: none;
-    padding: 5px 10px;
-    border-radius: 5px;
-    transition: background-color 0.3s;
-  }
+nav ul {
+  list-style-type: none;
+  display: flex;
+  margin: 0;
+  padding: 0;
+}
   
-  .nav-list a:hover {
-    background-color: #555;
-  }
+nav li {
+  margin-right: 20px;
+}
+nav a {
+  color: #333;
+  text-decoration: none;
+}
   
-  .Cart-icon {
+  /*.Cart-icon {
     display: flex;
     align-items: center;
   }
@@ -126,13 +137,13 @@ export default {
     cursor: pointer;
   }
   
-  body {
+ /* body {
   margin: 0; 
   padding: 0;
   box-sizing: border-box; 
   }
   main {
   padding-top: 80px; 
-}
+}*/
   </style>
   

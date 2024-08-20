@@ -16,8 +16,8 @@ export default {
   },
   mutations: {
     SET_USER_ID(state, token) {
-      const decoded = jwtDecode(token);
-      state.userId = decoded.userId;
+      const decodedToken = jwtDecode(token);
+      state.userId = decodedtoken.userId;
     },
     ADD_TO_CART(state, { product, quantity }) {
       const existingItem = state.cart.find(item => item.productId === product.id);
@@ -32,8 +32,8 @@ export default {
       state.cart = state.cart.filter(p => p.productId !== productId);
       localStorage.setItem('cart', JSON.stringify(state.cart));
     },
-    UPDATE_QUANTITY(state, { productId, quantity }) {
-      const item = state.cart.find(p => p.productId === productId);
+    UPDATE_CART_QUANTITY(state, { productId, quantity }) {
+      const item = state.cartItems.find((item) => item.productId === productId);
       if (item) {
         item.quantity = quantity;
       }
@@ -55,7 +55,7 @@ export default {
       commit('REMOVE_FROM_CART', productId);
     },
     updateQuantity({ commit }, { productId, quantity }) {
-      commit('UPDATE_QUANTITY', { productId, quantity });
+      commit('UPDATE_CART_QUANTITY', { productId, quantity });
     },
     clearCart({ commit }) {
       commit('CLEAR_CART');
