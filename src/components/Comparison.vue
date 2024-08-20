@@ -1,79 +1,160 @@
 <template>
-    <div class="comparison-page">
-      <h1>Product Comparison</h1>
-  
-      <div v-if="comparisonItems.length === 0">
-        <p>No items in the comparison list.</p>
-      </div>
-      
-      <div v-else>
-        <div class="comparison-grid">
-          <div v-for="product in comparisonItems" :key="product.id" class="comparison-item">
-            <img :src="product.image" :alt="product.title" class="product-image"/>
-            <h2>{{ product.title }}</h2>
-            <p>{{ product.description }}</p>
-            <p>Price: ${{ product.price }}</p>
-            <p>Category: {{ product.category }}</p>
-            <p>Rating: {{ product.rating.rate }} ({{ product.rating.count }} reviews)</p>
-            <button @click="removeFromComparison(product.id)" title="Remove from Comparison">
-              <i class="fa fa-times"></i> Remove
-            </button>
-          </div>
-        </div>
-        <button @click="clearComparison" class="clear-button">Clear Comparison List</button>
-      </div>
+  <div class="comparison">
+    <h1>Product Comparison</h1>
+    <div v-if="comparisonItems.length === 0">Your comparison list is empty</div>
+    <div v-else>
+      <table class="comparison-table">
+        <thead>
+          <tr>
+            <th>Product</th>
+            <th v-for="item in comparisonItems" :key="item.id">
+              <h2>{{ item.title }}</h2>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Image</td>
+            <td v-for="item in comparisonItems" :key="item.id">
+              <img :src="item.image" :alt="item.title" />
+            </td>
+          </tr>
+          <tr>
+            <td>Description</td>
+            <td v-for="item in comparisonItems" :key="item.id">
+              <p>{{ item.description }}</p>
+            </td>
+          </tr>
+          <tr>
+            <td>Price</td>
+            <td v-for="item in comparisonItems" :key="item.id">
+              <p>${{ item.price }}</p>
+            </td>
+          </tr>
+          <tr>
+            <td>Rating</td>
+            <td v-for="item in comparisonItems" :key="item.id">
+              <p>{{ item.rating.rate }} / 5 ({{ item.rating.count }} reviews)</p>
+            </td>
+          </tr>
+          <tr>
+            <td>Actions</td>
+            <td v-for="item in comparisonItems" :key="item.id">
+              <button @click="removeFromComparison(item.id)">Remove</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <button class="clear-comparison" @click="clearComparison">Clear Comparison</button>
     </div>
-  </template>
-  
-  <script>
-  import {mapState, mapGetters, mapActions } from 'vuex';
-  
-  export default {
-    name: 'Comparison',
-    computed: {
-        ...mapState('comparison', ['Items']),
-      ...mapGetters('comparison', ['comparisonItems']),
-    },
-    methods: {
-      ...mapActions('comparison', ['removeFromComparison', 'clearComparison']),
-    },
-  };
-  </script>
-  
-  <style scoped>
-.comparison-page {
+  </div>
+</template>
+
+<script>
+import { mapGetters, mapActions } from 'vuex';
+
+export default {
+  computed: {
+    ...mapGetters('comparison', ['comparisonItems']),
+  },
+  methods: {
+    ...mapActions('comparison', ['removeFromComparison', 'clearComparison']),
+  },
+};
+</script>
+
+<style scoped>
+.comparison {
+  max-width: 1000px;
+  margin: 0 auto;
   padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+  font-size: 1rem;
+  text-align: center;
+  color: #333;
+  margin-bottom: 20px;
 }
 
 .comparison-table {
   width: 100%;
   border-collapse: collapse;
+  margin-bottom: 20px;
 }
 
 .comparison-table th,
 .comparison-table td {
+  text-align: center;
+  padding: 15px;
   border: 1px solid #ddd;
+  background-color: #fff;
+}
+
+.comparison-table th {
+  background-color: #f1f1f1;
+  font-weight: bold;
+  color: #333;
+}
+
+.comparison-table img {
+  max-width: 100px;
+  height: auto;
+  border-radius: 4px;
+}
+
+.comparison-table p {
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.clear-comparison {
+  display: block;
+  width: 100%;
   padding: 10px;
+  font-size: 1rem;
+  background-color: #dc3545;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
   text-align: center;
 }
 
-.comparison-image {
-  max-width: 100px;
-  max-height: 100px;
+.clear-comparison:hover {
+  background-color: #c82333;
 }
 
-.remove-button,
-.clear-button {
-  padding: 5px 10px;
-  background-color: #f44336;
-  color: white;
-  border: none;
-  cursor: pointer;
-  margin-top: 10px;
+/* Responsive Design */
+@media (max-width: 768px) {
+  .comparison-table th,
+  .comparison-table td {
+    padding: 10px;
+  }
+
+  .comparison-table img {
+    max-width: 80px;
+  }
+
+  .comparison-table p {
+    font-size: 0.8rem;
+  }
 }
 
-.clear-button {
-  background-color: #555;
+@media (max-width: 480px) {
+  .comparison-table {
+    font-size: 0.8rem;
+  }
+
+  .comparison-table img {
+    max-width: 60px;
+  }
 }
-  </style>
+</style>
+
+
   

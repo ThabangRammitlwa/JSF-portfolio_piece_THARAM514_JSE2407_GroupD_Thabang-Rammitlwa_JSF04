@@ -23,6 +23,9 @@ export default {
     SET_USER(state, user) {
       state.user = user;
     },
+    LOGOUT(state) {
+      state.user = null;
+    },
   },
   actions: {
     login({ commit }, token) {

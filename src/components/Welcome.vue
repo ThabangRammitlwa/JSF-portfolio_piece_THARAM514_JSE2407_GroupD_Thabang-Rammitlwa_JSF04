@@ -1,16 +1,32 @@
 <template>
-    <div class="welcome-page">
-      <h1>Welcome to 1.Stop-Store</h1>
-      <p>Your one-stop shop for all your needs.</p>
-      <router-link to="/products" class="shop-now-button">Shop Now</router-link>
-    </div>
-  </template>
-  
-  <script>
-  export default {
-    name: 'Welcome',
-  };
-  </script>
+  <div class="welcome-page">
+    <h1>Welcome to 1.Stop-Store</h1>
+    <DiscountCarousel :discountedProducts="discountedProducts"/>
+    <p>Your one-stop shop for all your needs.</p>
+    <router-link to="/products" class="shop-now-button">Shop Now</router-link>
+  </div>
+</template>
+
+<script>
+import DiscountCarousel from '../components/DiscountCarousel.vue';
+import { mapActions, mapState } from 'vuex';
+
+export default {
+  name: 'Welcome',
+  components: {
+    DiscountCarousel
+  },
+  computed: {
+    ...mapState('product', ['discountedProducts'])
+  },
+  methods: {
+    ...mapActions('product', ['fetchDiscountedProducts'])
+  },
+  created() {
+    this.fetchDiscountedProducts();
+  }
+};
+</script>
   
   <style scoped>
   .welcome-page {

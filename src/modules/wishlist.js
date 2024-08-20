@@ -5,7 +5,9 @@ export default {
   },
   getters: {
     wishlistItems: state => state.wishlist || [],
-    wishlistItemCount: state => state.wishlist.length,
+    wishlistItemCount: (state) => {
+      return state.wishlist.length;
+    },
   },
   mutations: {
     ADD_TO_WISHLIST(state, product) {

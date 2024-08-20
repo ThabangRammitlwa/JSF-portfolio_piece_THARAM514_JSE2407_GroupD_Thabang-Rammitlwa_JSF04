@@ -1,86 +1,84 @@
-
 <template>
-    <header class="header">
-      <div class="container flex flex-center">
-        <h1 class="logo">1.Stop-Store</h1>
-        <nav>
-          <ul class="nav-list flex">
-            <input v-model="searchQuery" @keyup.enter="searchProducts" placeholder="Search..." />
-            <button @click="searchProducts">Search</button>
-            <router-link to="/" title="Home">
-              <i class="fas fa-home"></i>
-            </router-link>
-            <router-link to="/products" title="Shop">
-              <i class="fas fa-store"></i>
-            </router-link>
-            <router-link to="/wishlist" title="Wishlist">
+  <header class="header">
+    <div class="container flex flex-center">
+      <h1 class="logo">1.Stop-Store</h1>
+      <nav>
+        <ul class="nav-list flex">
+          <input v-model="searchQuery" @keyup.enter="searchProducts" placeholder="Search..." />
+          <button @click="searchProducts">Search</button>
+          <router-link to="/" title="Home">
+            <i class="fas fa-home"></i>
+          </router-link>
+          <router-link to="/products" title="Shop">
+            <i class="fas fa-store"></i>
+          </router-link>
+          <router-link to="/wishlist" title="Wishlist">
             <i class="fas fa-heart"></i>
+            ({{ wishlistItemCount }})
           </router-link>
-            <router-link to="/cart" class="Cart-icon">
-              <i class="fas fa-shopping-cart"></i>
-              ({{ cartItemCount }})
-            </router-link>
-            <router-link to="/comparison" title="Comparison">
+          <router-link to="/cart" class="Cart-icon">
+            <i class="fas fa-shopping-cart"></i>
+            ({{ cartItemCount }})
+          </router-link>
+          <router-link to="/comparison" title="Comparison">
             <i class="fas fa-exchange-alt"></i>
+            ({{ comparisonItemCount }})
           </router-link>
-            <li v-if="isAuthenticated">
-              <a href="#" @click.prevent="logout">Logout</a>
-            </li>
-            <li v-else>
-              <a href="#" @click.prevent="showLoginModal">Login</a>
-            </li>
-          </ul>
-        </nav>
-      </div>
-      <LoginModal v-if="showLogin" @close="showLogin = false" />
-    </header>
-  </template>
-  
-  <script>
-  import { mapGetters, mapActions } from 'vuex';
-  import LoginModal from '../components/LoginModal.vue'
-  
-  export default {
-    name: 'Header',
-    components: {
-      LoginModal,
+          <li v-if="isAuthenticated">
+            <a href="#" @click.prevent="logout">Logout</a>
+          </li>
+          <li v-else>
+            <a href="#" @click.prevent="showLoginModal">Login</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+    <LoginModal v-if="showLogin" @close="showLogin = false" />
+  </header>
+</template>
+
+<script>
+import { mapGetters, mapActions } from 'vuex';
+import LoginModal from '../components/LoginModal.vue';
+
+export default {
+  name: 'Header',
+  components: {
+    LoginModal,
+  },
+  data() {
+    return {
+      searchQuery: '',
+      showLogin: false,
+    };
+  },
+  computed: {
+    ...mapGetters('auth', ['isAuthenticated']),
+    ...mapGetters('cart', ['cartItemCount']),
+    ...mapGetters('wishlist', ['wishlistItemCount']),
+    ...mapGetters('comparison', ['comparisonItemCount']),
+  },
+  methods: {
+    ...mapActions('auth', ['logout']), // Namespace 'auth' for logout
+    searchProducts() {
+      if (this.searchQuery.trim()) {
+        this.$router.push({ name: 'Products', query: { search: this.searchQuery } });
+      }
     },
-    data() {
-      return {
-        searchQuery: '',
-        showLogin: false,
-      };
+    showLoginModal() {
+      this.showLogin = true;
     },
-    computed: {
-        ...mapGetters('auth', ['isAuthenticated']),  ...mapActions('auth', ['logout']), 
-      ...mapGetters('cart', ['cartItemCount']),
-        ...mapGetters('wishlist',['wishlistItemCount']),
-    },
-    methods: {
-      ...mapActions('auth', ['logout']), 
-      searchProducts() {
-        if (this.searchQuery.trim()) {
-          this.$router.push({ name: 'Products', query: { search: this.searchQuery } });
-        }
-      },
-      showLoginModal() {
-        this.showLogin = true;
-      },
-      logout() { 
-        this.$store.dispatch('logout'); 
-        this.$router.push('/login'); 
-      },
-    },
-  };
-  </script>
-  
+  },
+};
+</script>
+
   <style scoped>
   .header {
     width: 100%;
     background-color: #333;
     color: #fff;
     box-sizing: border-box;
-   /* position: fixed;*/
+    position: fixed;
     top: 0;
     left: 0;
     z-index:1000;

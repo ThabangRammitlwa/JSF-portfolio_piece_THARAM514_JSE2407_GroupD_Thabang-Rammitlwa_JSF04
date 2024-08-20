@@ -32,14 +32,14 @@
         <p>Category: {{ productDetail.category }}</p>
         <p>Rating: {{ productDetail.rating.rate }} ({{ productDetail.rating.count }} reviews)</p>
         <div class="action-buttons">
-          <button @click="handleAddToCart" class="action-button" :class="{ 'active': isProductInCart }">
-            <i class="fa fa-shopping-cart"></i> {{ isProductInCart ? 'In Cart' : 'Add to Cart' }}
+          <button @click="handleAddToCart" class="action-button" :class="{ 'active': isInCart }">
+            <i class="fa fa-shopping-cart"></i> {{ isInCart ? 'In Cart' : 'Add to Cart' }}
           </button>
-          <button @click="handleAddToWishlist" class="action-button" :class="{ 'active': isProductInWishlist }">
-            <i class="fa fa-heart"></i> {{ isProductInWishlist ? 'In Wishlist' : 'Add to Wishlist' }}
+          <button @click="handleAddToWishlist" class="action-button" :class="{ 'active': isInWishlist }">
+            <i class="fa fa-heart"></i> {{ isInWishlist ? 'In Wishlist' : 'Add to Wishlist' }}
           </button>
-          <button @click="handleAddToComparison" class="action-button" :class="{ 'active': isProductInComparison }">
-            <i class="fa fa-exchange-alt"></i> {{ isProductInComparison ? 'In Comparison' : 'Add to Comparison' }}
+          <button @click="handleAddToComparison" class="action-button" :class="{ 'active': isInComparison }">
+            <i class="fa fa-exchange-alt"></i> {{ isInComparison ? 'In Comparison' : 'Add to Comparison' }}
           </button>
         </div>
       </div>
@@ -48,8 +48,8 @@
 </template>
 
 <script>
-import { mapState, mapGetters, mapActions } from 'vuex';
-import { formatDate } from '@/utils/dateHelpers';
+import { mapState, mapActions } from 'vuex';
+import { formatDate } from '../utils/dateHelpers';
 
 export default {
   name: 'ProductDetails',
@@ -59,71 +59,56 @@ export default {
       required: true
     }
   },
+  data() {
+    return {
+      isInWishlist: false,
+      isInCart: false,
+      isInComparison: false
+    };
+  },
   computed: {
     ...mapState(['loading', 'error', 'productDetail']),
-    ...mapGetters('cart', ['isInCart']),
-    ...mapGetters('wishlist', ['isInWishlist']),
-    ...mapGetters('comparison', ['isInComparison']),
-    
-    isProductInCart() {
-      return this.isInCart(this.id);
+    isInWishlist() {
+      return this.$store.getters['wishlist/isInWishlist'](this.productDetail?.id);
     },
-    isProductInWishlist() {
-      return this.isInWishlist(this.id);
+    isInCart() {
+      return this.$store.getters['cart/isInCart'](this.productDetail?.id);
     },
-    isProductInComparison() {
-      return this.isInComparison(this.id);
+    isInComparison() {
+      return this.$store.getters['comparison/isInComparison'](this.productDetail?.id);
     }
   },
   methods: {
-    ...mapActions(['fetchProductDetail']),
+    ...mapActions('product', ['fetchProductDetail']),
     ...mapActions('cart', ['addToCart']),
-    ...mapActions('cart', ['addToWishlist']),
+    ...mapActions('wishlist', ['addToWishlist']),
     ...mapActions('comparison', ['addToComparison']),
     formatDate,
-
+    
     goBack() {
       this.$router.push('/products');
     },
     
-    handleAddToCart() {
-      if (!this.productDetail) {
-        console.error('Product detail not available');
-        return;
-      }
-      try {
-        this.addToCart({ 
-          product: this.productDetail, 
-          quantity: 1,
-          price: this.productDetail.discountedPrice || this.productDetail.price
-        });
-      } catch (error) {
-        console.error('Error adding to cart:', error);
-      }
+    async handleAddToCart() {
+      if (!this.productDetail) return;
+      await this.addToCart({ 
+        product: this.productDetail, 
+        quantity: 1,
+        price: this.productDetail.discountedPrice || this.productDetail.price
+      });
+      this.isInCart = true;
     },
     
-    handleAddToWishlist() {
-      if (!this.productDetail) {
-        console.error('Product detail not available');
-        return;
-      }
-      try {
-        this.addToWishlist(this.productDetail);
-      } catch (error) {
-        console.error('Error adding to wishlist:', error);
-      }
+    async handleAddToWishlist() {
+      if (!this.productDetail) return;
+      await this.addToWishlist(this.productDetail);
+      this.isInWishlist = !this.isInWishlist;
     },
     
-    handleAddToComparison() {
-      if (!this.productDetail) {
-        console.error('Product detail not available');
-        return;
-      }
-      try {
-        this.addToComparison(this.productDetail);
-      } catch (error) {
-        console.error('Error adding to comparison:', error);
-      }
+    async handleAddToComparison() {
+      if (!this.productDetail) return;
+      await this.addToComparison(this.productDetail);
+      this.isInComparison = !this.isInComparison;
     }
   },
   mounted() {

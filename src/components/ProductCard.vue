@@ -9,6 +9,7 @@
       <div class="icons">
         <i class="fa fa-heart" @click.stop="addToWishlist":class="{ 'active': isInWishlist }"title="Add to Wishlist"></i>
         <i  class="fa fa-shopping-cart"  @click.stop="addToCart" :class="{ 'active': isInCart }"title="Add to Cart" ></i>
+        <i class="fa fa-exchange-alt"  @click.stop="addToComparison"  :class="{ 'active': isInComparison }" title="Add to Comparison"></i>
 
       </div>
     </div>
@@ -16,7 +17,7 @@
   
   <script>
 
-  import { mapGetters, mapActions } from 'vuex';
+  import { mapActions } from 'vuex';
  
   export default {
     name: 'ProductCard',
@@ -30,13 +31,15 @@
     data() {
     return {
       isInWishlist: false,
-      isInCart: false
+      isInCart: false,
+      isInComparison:false
     };
   },
 
     methods: {
       ...mapActions('cart', ['addToCart']),
-      ...mapActions('wishlist', [ 'addToWishlist']),
+      ...mapActions('wishlist', ['addToWishlist']),
+      ...mapActions('comparison', ['addToComparison']),
 
       goToDetail() {
         this.$router.push(`/product/${this.product.id}`);
@@ -49,6 +52,11 @@
       addToCart() {
       this.$store.dispatch('cart/addToCart', { product: this.product, quantity: 1 });
       this.isInCart = !this.isInCart;
+      },
+
+      addToComparison() {
+      this.$store.dispatch('comparison/addToComparison', this.product);
+      this.isInComparison = !this.isInComparison;
     }
     }
   };
