@@ -66,7 +66,7 @@ export default {
       isInComparison: false
     };
   },
-  computed: {
+ /* computed: {
     ...mapState(['loading', 'error', 'productDetail']),
     isInWishlist() {
       return this.$store.getters['wishlist/isInWishlist'](this.productDetail?.id);
@@ -77,7 +77,7 @@ export default {
     isInComparison() {
       return this.$store.getters['comparison/isInComparison'](this.productDetail?.id);
     }
-  },
+  },*/
   methods: {
     ...mapActions('product', ['fetchProductDetail']),
     ...mapActions('cart', ['addToCart']),

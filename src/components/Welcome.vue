@@ -1,5 +1,8 @@
 <template>
   <div class="welcome-page">
+    <div class="animated-container">
+        <img src="../assets/s.png" alt="1.Stop-Store Logo" class="logo">
+    </div>
     <h1>Welcome to 1.Stop-Store</h1>
     <DiscountCarousel :discountedProducts="discountedProducts"/>
     <p>Your one-stop shop for all your needs.</p>
@@ -38,6 +41,30 @@ export default {
     text-align: center;
     background-color: #f4f4f4;
   }
+  .animated-container {
+  height: 80vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: bounce 2s infinite ease-in-out alternate;
+}
+@keyframes bounce {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(20px);
+  }
+}
+
+.logo {
+    background-color: inherit;
+  max-width: 50%;
+  height: auto;
+  object-fit: contain;
+  filter: grayscale(1); 
+}
+
   
   h1 {
     font-size: 2.5em;
