@@ -81,16 +81,14 @@ export default {
 </script>
 
 <style scoped>
-/* Your existing styles */
-</style>
-
-
-
-<style scoped>
 header {
   background-color: #000;
   color: #fff;
   padding: 10px 20px;
+  top: 0;
+  left:0;
+  width: 100%;
+  z-index: 1000;
 }
 
 .container {
@@ -98,6 +96,7 @@ header {
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap; 
+  margin: auto;
 }
 
 .logo {
