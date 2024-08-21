@@ -57,3 +57,5 @@ Displays a carousel of products with discounts.
 Displays a toggle button to switch between light and dark themes.
 
 https://youtu.be/9mCmZ0wEf4s?si=wgT3tb4XDdhltEc2 (youtube)
+
+https://vercel.com/thabang-rammitlwas-projects/jsf-portfolio-piece-tharam-514-jse-2407-group-d-thabang-rammitlwa-jsf-04 (vercel)
