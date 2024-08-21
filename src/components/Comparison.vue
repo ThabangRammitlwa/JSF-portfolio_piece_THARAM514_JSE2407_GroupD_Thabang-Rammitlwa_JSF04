@@ -64,19 +64,39 @@ export default {
 </script>
 
 <style scoped>
+:root {
+  --card-background: #ffffff;
+  --text-color: #000000;
+  --icon-color: #666666;
+  --table-header-background: #f1f1f1;
+  --table-border-color: #ddd;
+  --button-background: #dc3545;
+  --button-hover-background: #c82333;
+}
+
+body.dark-mode {
+  --card-background: #1e1e1e;
+  --text-color: #ffffff;
+  --icon-color: #aaaaaa;
+  --table-header-background: #2e2e2e;
+  --table-border-color: #444;
+  --button-background: #e74c3c;
+  --button-hover-background: #c82333;
+}
+
 .comparison {
   max-width: 1000px;
   margin: 0 auto;
   padding: 20px;
-  background-color: #f9f9f9;
+  background-color: var(--card-background);
   border-radius: 8px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 h2 {
-  font-size: 1rem;
+  font-size: 1.5rem; /* Adjusted font size */
   text-align: center;
-  color: #333;
+  color: var(--text-color);
   margin-bottom: 20px;
 }
 
@@ -90,14 +110,14 @@ h2 {
 .comparison-table td {
   text-align: center;
   padding: 15px;
-  border: 1px solid #ddd;
-  background-color: #fff;
+  border: 1px solid var(--table-border-color);
+  background-color: var(--card-background);
 }
 
 .comparison-table th {
-  background-color: #f1f1f1;
+  background-color: var(--table-header-background);
   font-weight: bold;
-  color: #333;
+  color: var(--text-color);
 }
 
 .comparison-table img {
@@ -108,7 +128,7 @@ h2 {
 
 .comparison-table p {
   font-size: 0.9rem;
-  color: #555;
+  color: var(--text-color);
 }
 
 .clear-comparison {
@@ -116,7 +136,7 @@ h2 {
   width: 100%;
   padding: 10px;
   font-size: 1rem;
-  background-color: #dc3545;
+  background-color: var(--button-background);
   color: #fff;
   border: none;
   border-radius: 4px;
@@ -126,7 +146,7 @@ h2 {
 }
 
 .clear-comparison:hover {
-  background-color: #c82333;
+  background-color: var(--button-hover-background);
 }
 
 /* Responsive Design */
@@ -155,6 +175,7 @@ h2 {
   }
 }
 </style>
+
 
 
   

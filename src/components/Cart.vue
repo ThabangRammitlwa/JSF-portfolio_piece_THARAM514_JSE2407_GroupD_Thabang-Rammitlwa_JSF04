@@ -35,7 +35,7 @@ export default {
   methods: {
     ...mapActions('cart', ['removeFromCart', 'addToWishlist', 'addToComparison', 'clearCart', 'addToCart', 'updateQuantity']),
 
-   /* removeFromCartHandler(productId) {
+   removeFromCartHandler(productId) {
       this.removeFromCart(productId);
     },
 
@@ -55,7 +55,7 @@ export default {
       } else {
         this.removeFromCartHandler(productId);
       }
-    },*/
+    },
 
     toggleCart(item) {
       if (this.isInCart(item.productId)) {
@@ -71,11 +71,24 @@ export default {
 
   
 <style scoped>
+
+:root {
+  --card-background: #ffffff;
+  --text-color: #000000;
+  --icon-color: #666666;
+}
+
+body.dark-mode {
+  --card-background: #1e1e1e;
+  --text-color: #ffffff;
+  --icon-color: #aaaaaa;
+}
+
 .cart {
   max-width: 800px;
   margin: 0 auto;
   padding: 20px;
-  background-color: #f9f9f9;
+  background-color: var(--card-background);
   border-radius: 8px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
@@ -84,14 +97,14 @@ h1 {
   font-size: 2rem;
   margin-bottom: 20px;
   text-align: center;
-  color: #333;
+  color: var(--text-color);
 }
 
 .cart-item {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background-color: #fff;
+  background-color: var(--card-background);
   padding: 15px;
   margin-bottom: 15px;
   border-radius: 6px;
@@ -113,12 +126,12 @@ h1 {
 .details h2 {
   font-size: 1.2rem;
   margin: 0;
-  color: #555;
+  color: var(--text-color);
 }
 
 .details p {
   margin: 5px 0;
-  color: #777;
+  color: var(--icon-color);
   font-size: 1rem;
 }
 
@@ -145,7 +158,7 @@ h1 {
 
 .cart-summary p {
   font-size: 1.1rem;
-  color: #333;
+  color: var(--text-color);
 }
 
 .cart-summary button {
@@ -163,7 +176,7 @@ h1 {
   background-color: #c82333;
 }
 
-
+/* Responsive Styles */
 @media (max-width: 600px) {
   .cart-item {
     flex-direction: column;

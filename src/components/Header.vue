@@ -97,11 +97,13 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap; 
 }
 
 .logo {
   font-size: 24px;
   font-weight: bold;
+  margin-bottom: 10px; 
 }
 
 .search-bar {
@@ -129,6 +131,7 @@ header {
   padding: 0;
   display: flex;
   align-items: center;
+  flex-wrap: wrap; 
 }
 
 .nav-list a {
@@ -144,6 +147,7 @@ header {
 .user-menu {
   display: flex;
   align-items: center;
+  margin-left: 20px;
 }
 
 .user-menu span {
@@ -158,7 +162,56 @@ header {
   cursor: pointer;
   margin-left: 10px;
 }
+
+
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .search-bar {
+    margin: 10px 0;
+  }
+
+  .nav-list {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .nav-list a {
+    margin-left: 0;
+    margin-bottom: 10px;
+  }
+
+  .user-menu {
+    margin-top: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .logo {
+    font-size: 20px;
+  }
+
+  .nav-list {
+    align-items: center;
+  }
+
+  .nav-list a {
+    font-size: 16px;
+  }
+
+  .Cart-icon .fas, .nav-list i {
+    font-size: 16px;
+  }
+
+  .user-menu span {
+    font-size: 12px;
+  }
+}
 </style>
+
 
 
   
