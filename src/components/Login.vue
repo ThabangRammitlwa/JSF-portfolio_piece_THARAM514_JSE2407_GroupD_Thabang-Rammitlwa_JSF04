@@ -68,15 +68,18 @@ export default {
           }),
         });
 
+        if (response.status === 401) {
+          throw new Error('Invalid username or password');
+        }
+
         if (!response.ok) {
-          throw new Error('Login failed');
+          throw new Error('Login failed. Please try again later.');
         }
 
         const data = await response.json();
         localStorage.setItem('token', data.token);
         this.$store.dispatch('auth/setUserId', data.token);
 
-      
         const redirectTo = this.$route.query.redirect || '/';
         this.$router.push(redirectTo);
       } catch (error) {
@@ -85,6 +88,17 @@ export default {
         this.loading = false;
       }
     },
+    logoutUser() {
+      localStorage.removeItem('token');
+      this.$store.dispatch('auth/clearUser');
+      this.$router.push('/login');
+    },
+  },
+  created() {
+    const token = localStorage.getItem('token');
+    if (token) {
+      this.$router.push('/');
+    }
   },
 };
 </script>
@@ -92,10 +106,29 @@ export default {
 <style scoped>
 .error {
   color: red;
+  margin-top: 10px;
 }
+
 .loading {
-  color: blue;
+  margin-top: 10px;
+}
+
+.login {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+button {
+  margin-top: 10px;
+}
+
+button[type="button"] {
+  margin-left: 10px;
 }
 </style>
+
 
   

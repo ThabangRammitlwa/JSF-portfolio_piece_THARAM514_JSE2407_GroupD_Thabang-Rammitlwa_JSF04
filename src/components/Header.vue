@@ -9,11 +9,11 @@
       <nav>
         <ul class="nav-list flex">
           <router-link to="/" title="Home">
-              <i class="fas fa-home"></i>
-            </router-link>
-            <router-link to="/products" title="Shop">
-              <i class="fas fa-store"></i>
-            </router-link>
+            <i class="fas fa-home"></i>
+          </router-link>
+          <router-link to="/products" title="Shop">
+            <i class="fas fa-store"></i>
+          </router-link>
           <router-link to="/wishlist" title="Wishlist">
             <i class="fas fa-heart"></i>
             ({{ wishlistItemCount }})
@@ -26,13 +26,19 @@
             <i class="fas fa-exchange-alt"></i>
             ({{ comparisonItemCount }})
           </router-link>
-          <router-link to="/Login" title="Login">
+          <li v-if="isAuthenticated" class="user-menu">
+            <router-link to="/Login" title="Login">
+              <i class="fas fa-user"></i>
+            </router-link>
+            <button @click="logout">Logout</button>
+          </li>
+          <router-link v-else to="/login" title="Login">
             <i class="fas fa-user"></i>
           </router-link>
         </ul>
       </nav>
     </div>
-    <LoginModal v-if="showLogin" @close="showLogin = false" />
+    <LoginModal v-if="showLogin" @close="showLogin = false" @login-success="onLoginSuccess" />
   </header>
 </template>
 
@@ -52,13 +58,13 @@ export default {
     };
   },
   computed: {
-    ...mapGetters('auth', ['isAuthenticated']),
+    ...mapGetters('auth', ['isAuthenticated', 'userName']),
     ...mapGetters('cart', ['cartItemCount']),
     ...mapGetters('wishlist', ['wishlistItemCount']),
     ...mapGetters('comparison', ['comparisonItemCount']),
   },
   methods: {
-    ...mapActions('auth', ['logout']), 
+    ...mapActions('auth', ['logout']),
     searchProducts() {
       if (this.searchQuery.trim()) {
         this.$router.push({ name: 'Products', query: { search: this.searchQuery } });
@@ -67,9 +73,18 @@ export default {
     showLoginModal() {
       this.showLogin = true;
     },
+    onLoginSuccess() {
+      this.showLogin = false; 
+    },
   },
 };
 </script>
+
+<style scoped>
+/* Your existing styles */
+</style>
+
+
 
 <style scoped>
 header {
@@ -77,38 +92,30 @@ header {
   color: #fff;
   padding: 10px 20px;
 }
-.top-bar {
-  background-color: #000;
-  color: #fff;
-  padding: 5px 0;
-}
-.top-bar .top-link {
-  margin-right: 20px;
-  font-size: 12px;
-}
-.highlight {
-  color: #ff4444;
-  font-weight: bold;
-}
+
 .container {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
+
 .logo {
   font-size: 24px;
   font-weight: bold;
 }
+
 .search-bar {
   flex-grow: 1;
   max-width: 400px;
   margin: 0 20px;
   display: flex;
 }
+
 .search-bar input {
   width: 100%;
   padding: 5px;
 }
+
 .search-bar button {
   padding: 5px 10px;
   background-color: #ff4444;
@@ -116,19 +123,42 @@ header {
   border: none;
   cursor: pointer;
 }
+
 .nav-list {
   list-style: none;
+  padding: 0;
   display: flex;
   align-items: center;
 }
+
 .nav-list a {
   color: #fff;
   margin-left: 20px;
-  position: relative;
+  text-decoration: none;
 }
+
 .Cart-icon .fas, .nav-list i {
   font-size: 18px;
 }
+
+.user-menu {
+  display: flex;
+  align-items: center;
+}
+
+.user-menu span {
+  margin-left: 5px;
+  font-size: 14px;
+}
+
+.user-menu button {
+  background: none;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  margin-left: 10px;
+}
 </style>
+
 
   

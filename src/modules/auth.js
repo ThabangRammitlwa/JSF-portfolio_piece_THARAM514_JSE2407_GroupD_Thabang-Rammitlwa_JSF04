@@ -7,8 +7,9 @@ export default {
     user: null,
   },
   getters: {
-    isAuthenticated: state => !!state.token,
-    userId: state => state.user ? state.user.userId : null,
+    isAuthenticated: (state) => !!state.token,
+    userName: (state) => state.user ? state.user.name : '',
+    userId: (state) => state.user ? state.user.userId : '',
   },
   mutations: {
     SET_TOKEN(state, token) {
@@ -31,12 +32,14 @@ export default {
     login({ commit }, token) {
       commit('SET_TOKEN', token);
       const decodedToken = jwtDecode(token);
-      commit('SET_USER', { userId: decodedToken.userId });
+      commit('SET_USER', { userId: decodedToken.userId, name: decodedToken.userName });
     },
     logout({ commit }) {
       commit('CLEAR_TOKEN');
+      commit('LOGOUT');
     },
   },
 };
+
 
   
