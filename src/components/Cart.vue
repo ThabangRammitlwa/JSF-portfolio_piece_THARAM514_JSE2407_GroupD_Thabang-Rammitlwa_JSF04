@@ -9,9 +9,9 @@
           <h2>{{ item.title || 'Unknown Product' }}</h2>
           <p v-if="item.price">Price: ${{ item.price }}</p>
           <button @click="removeFromCartHandler(item.productId)">Remove from Cart</button>
-          <button @click="updateQuantity({productId: item.productId, quantity: item.quantity - 1})">-</button>
+          <button @click="updateItemQuantity({productId: item.productId, quantity: item.quantity - 1})">-</button>
           <span class="mx-2">{{ item.quantity }}</span>
-          <button @click="updateQuantity({productId: item.productId, quantity: item.quantity + 1})">+</button>
+          <button @click="updateItemQuantity({productId: item.productId, quantity: item.quantity + 1})">+</button>
           <button @click="moveToWishlist(item)">Move to Wishlist</button>
           <button @click="moveToComparison(item)">Move to Comparison</button>
         </div>
@@ -24,6 +24,7 @@
   </div>
 </template>
 
+
 <script>
 import { mapGetters, mapActions } from 'vuex';
 
@@ -32,9 +33,9 @@ export default {
     ...mapGetters('cart', ['cartItems', 'cartItemCount', 'isInCart', 'totalCost']),
   },
   methods: {
-    ...mapActions('cart', ['removeFromCart', 'addToWishlist', 'addToComparison', 'clearCart', 'addToCart', 'updateCartItemQuantity']),
+    ...mapActions('cart', ['removeFromCart', 'addToWishlist', 'addToComparison', 'clearCart', 'addToCart', 'updateQuantity']),
 
-    removeFromCartHandler(productId) {
+   /* removeFromCartHandler(productId) {
       this.removeFromCart(productId);
     },
 
@@ -48,9 +49,13 @@ export default {
       this.removeFromCartHandler(item.productId);
     },
 
-    updateQuantity(payload) {
-      this.updateCartItemQuantity(payload);
-    },
+    updateItemQuantity({ productId, quantity }) {
+      if (quantity > 0) {
+        this.updateQuantity({ productId, quantity });
+      } else {
+        this.removeFromCartHandler(productId);
+      }
+    },*/
 
     toggleCart(item) {
       if (this.isInCart(item.productId)) {
@@ -62,6 +67,7 @@ export default {
   },
 };
 </script>
+
 
   
 <style scoped>

@@ -55,7 +55,7 @@ export default createStore({
       state.userId = null;
     },
 
-    updateCartItemQuantity(state, { productId, quantity }) {
+    UPDATE_CART_QUANTITY(state, { productId, quantity }) {
       const item = state.cartItems.find((item) => item.productId === productId);
       if (item) {
         item.quantity = quantity;
@@ -114,8 +114,8 @@ export default createStore({
       this.$router.push('/');
     },
 
-    updateCartItemQuantity({ commit }, { productId, quantity }) {
-      commit('updateCartItemQuantity', { productId, quantity });
+    updateItemQuantity({ commit }, { productId, quantity }) {
+      commit('updateItemQuantity', { productId, quantity });
     },
   },
   getters: {

@@ -9,7 +9,7 @@
           <h2>{{ item.title || 'Unknown Product' }}</h2>
           <p v-if="item.price">Price: ${{ item.price }}</p>
           <p v-if="item.description">{{ item.description }}</p>
-          <button @click="removeFromWishlist(item.Id)">Remove from Wishlist</button>
+          <button @click="removeFromWishlist(item.id)">Remove from Wishlist</button>
           <button @click="moveToCart(item.id)">Move to Cart</button>
         </div>
       </div>
@@ -44,12 +44,12 @@
       },
       clearWishlistHandler() {
       this.clearWishlist();
-    },
+    },*/
       
       moveToCart(item) {
         this.addToCart({ product: item, quantity: 1 });
-        this.removeFromWishlistHandler(item.productId); // Using the correct method here
-      },*/
+        this.removeFromWishlist(item.id); // Using the correct method here
+      },
       
       toggleWishlist(item) {
         if (this.isInWishlist(item.Id)) {

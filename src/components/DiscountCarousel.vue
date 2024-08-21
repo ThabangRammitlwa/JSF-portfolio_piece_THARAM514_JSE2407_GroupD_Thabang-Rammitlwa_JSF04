@@ -1,15 +1,13 @@
 <template>
   <div class="discount-carousel">
-    <Carousel 
-      :itemsToShow="carouselSettings.itemsToShow" 
-      :loop="true" 
-      :autoplay="3000"  
-      :pauseAutoplayOnHover="false"
-      :snap-align="'start'"      class="carousel-horizontal"
-      >
-
-      <Slide v-for="product in discountedProducts" :key="product.id">
-        <div class="product-card" @click="goToProduct(product.id)">
+    <div class="carousel-wrapper">
+      <div class="carousel-content">
+        <div 
+          v-for="product in discountedProducts" 
+          :key="product.id" 
+          class="product-card" 
+          @click="goToProduct(product.id)"
+        >
           <img class="circular-image" :src="product.image" :alt="product.title">
           <h3>{{ product.title }}</h3>
           <p class="discount">{{ product.discountPercentage }}% OFF</p>
@@ -18,23 +16,24 @@
             <span class="original">${{ product.price.toFixed(2) }}</span>
           </p>
         </div>
-      </Slide>
-    </Carousel>
+      </div>
+    </div>
   </div>
 </template>
 
 
+
+
 <script>
-import { Carousel, Slide } from 'vue3-carousel';
-import 'vue3-carousel/dist/carousel.es'; 
 import { mapState } from 'vuex';
 
 export default {
   name: 'DiscountCarousel',
-  components: { Carousel, Slide },
   data() {
     return {
       itemsToShow: 1,
+      autoplayInterval: null,
+      scrollAmount: 100, 
       breakpoints: {
         640: {
           itemsToShow: 2,
@@ -69,6 +68,22 @@ export default {
     updateItemsToShow() {
       this.itemsToShow = this.getItemsToShow();
     },
+    startAutoplay() {
+      this.autoplayInterval = setInterval(() => {
+        const container = this.$el.querySelector('.carousel-wrapper');
+        const maxScrollLeft = container.scrollWidth - container.clientWidth;
+        if (container.scrollLeft + this.scrollAmount >= maxScrollLeft) {
+          container.scrollTo({ left: 0, behavior: 'smooth' }); 
+        } else {
+          container.scrollBy({ left: this.scrollAmount, behavior: 'smooth' });
+        }
+      }, 1000);
+    },
+    stopAutoplay() {
+      if (this.autoplayInterval) {
+        clearInterval(this.autoplayInterval);
+      }
+    }
   },
   mounted() {
     if (this.discountedProducts.length === 0) {
@@ -76,96 +91,96 @@ export default {
     }
     window.addEventListener('resize', this.updateItemsToShow);
     this.updateItemsToShow();
+    this.startAutoplay();
   },
   beforeUnmount() {
+    this.stopAutoplay();
     window.removeEventListener('resize', this.updateItemsToShow);
   },
 };
 </script>
+
+
+
 
 <style scoped>
 .discount-carousel {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 20px 0;
+  overflow: hidden;
 }
 
-.carousel-horizontal {
+.carousel-wrapper {
   display: flex;
-  align-items: center;
-  overflow-x: scroll; /* Enable horizontal scrolling if necessary */
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+.carousel-content {
+  display: flex;
+  gap: 10px; 
 }
 
 .product-card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
+  background-color:var(--card-background);
+  color:var(--text-color);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   cursor: pointer;
-  margin: 0 15px; /* Add space between carousel items */
+  flex-shrink: 0;
+  margin: 10px;
+  overflow: hidden;
+  padding: 12px; 
+  text-align: center;
+  width: 150px; 
 }
 
 .circular-image {
-  width: 100px;
-  height: 100px;
   border-radius: 50%;
+  height: 80px; 
   object-fit: cover;
-  margin-bottom: 10px;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  width: 80px;
 }
 
 h3 {
-  font-size: 16px;
-  margin: 5px 0;
+  font-size: 14px; 
+  font-weight: 600;
+  margin-top: 8px;
+  color: var(--card-background);
 }
 
 .discount {
-  color: #ff0000;
-  font-weight: bold;
+  color: #f44336;
+  font-weight: 600;
+  margin-top: 6px;
 }
 
 .price {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  margin-top: 6px;
 }
 
 .discounted {
-  font-size: 18px;
-  color: #333;
-  font-weight: bold;
+  color: #f44336;
+  font-weight: 600;
+  margin-right: 8px;
 }
 
 .original {
-  font-size: 14px;
-  color: #aaa;
+  color: #888;
   text-decoration: line-through;
 }
 
-@media (min-width: 640px) {
-  .circular-image {
-    width: 120px;
-    height: 120px;
+:root {
+    --card-background: #ffffff;
+    --text-color: #000000;
+    --icon-color: #666666;
   }
-
-  h3 {
-    font-size: 18px;
+  
+  body.dark-mode :root {
+    --card-background: #1e1e1e;
+    --text-color: #ffffff;
+    --icon-color: #aaaaaa;
   }
-}
-
-@media (min-width: 1024px) {
-  .circular-image {
-    width: 140px;
-    height: 140px;
-  }
-
-  h3 {
-    font-size: 20px;
-  }
-}
-
-
 </style>
-
-

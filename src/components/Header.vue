@@ -1,35 +1,34 @@
 <template>
   <header class="header">
-    <div class="container flex flex-center">
+    <div class="container flex-center">
       <h1 class="logo">1.Stop-Store</h1>
+      <div class="search-bar">
+        <input v-model="searchQuery" @keyup.enter="searchProducts" placeholder="Search..." />
+        <button @click="searchProducts">Search</button>
+      </div>
       <nav>
         <ul class="nav-list flex">
-          <input v-model="searchQuery" @keyup.enter="searchProducts" placeholder="Search..." />
-          <button @click="searchProducts">Search</button>
           <router-link to="/" title="Home">
-            <i class="fas fa-home"></i>
-          </router-link>
-          <router-link to="/products" title="Shop">
-            <i class="fas fa-store"></i>
-          </router-link>
+              <i class="fas fa-home"></i>
+            </router-link>
+            <router-link to="/products" title="Shop">
+              <i class="fas fa-store"></i>
+            </router-link>
           <router-link to="/wishlist" title="Wishlist">
             <i class="fas fa-heart"></i>
             ({{ wishlistItemCount }})
           </router-link>
-          <router-link to="/cart" class="Cart-icon">
+          <router-link to="/cart" title="Cart" class="Cart-icon">
             <i class="fas fa-shopping-cart"></i>
             ({{ cartItemCount }})
           </router-link>
-          <router-link to="/comparison" title="Comparison">
+          <router-link to="/comparison" title="Comparison List">
             <i class="fas fa-exchange-alt"></i>
             ({{ comparisonItemCount }})
           </router-link>
-          <li v-if="isAuthenticated">
-            <a href="#" @click.prevent="logout">Logout</a>
-          </li>
-          <li v-else>
-            <a href="#" @click.prevent="showLoginModal">Login</a>
-          </li>
+          <router-link to="/Login" title="Login">
+            <i class="fas fa-user"></i>
+          </router-link>
         </ul>
       </nav>
     </div>
@@ -59,7 +58,7 @@ export default {
     ...mapGetters('comparison', ['comparisonItemCount']),
   },
   methods: {
-    ...mapActions('auth', ['logout']), // Namespace 'auth' for logout
+    ...mapActions('auth', ['logout']), 
     searchProducts() {
       if (this.searchQuery.trim()) {
         this.$router.push({ name: 'Products', query: { search: this.searchQuery } });
@@ -72,78 +71,64 @@ export default {
 };
 </script>
 
-  <style scoped>
- header {
+<style scoped>
+header {
   background-color: #000;
   color: #fff;
+  padding: 10px 20px;
+}
+.top-bar {
+  background-color: #000;
+  color: #fff;
+  padding: 5px 0;
+}
+.top-bar .top-link {
+  margin-right: 20px;
+  font-size: 12px;
+}
+.highlight {
+  color: #ff4444;
+  font-weight: bold;
+}
+.container {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 20px;
 }
-.header-left,
-.header-right {
+.logo {
+  font-size: 24px;
+  font-weight: bold;
+}
+.search-bar {
+  flex-grow: 1;
+  max-width: 400px;
+  margin: 0 20px;
   display: flex;
-  align-items: center;
 }
-.header-left,
-.header-right {
-  display: flex;
-  align-items: center;
+.search-bar input {
+  width: 100%;
+  padding: 5px;
 }
-
-.header-right button {
-  background-color: #fff;
-  color: #000;
+.search-bar button {
+  padding: 5px 10px;
+  background-color: #ff4444;
+  color: #fff;
   border: none;
-  padding: 8px 16px;
-  border-radius: 4px;
   cursor: pointer;
 }
-  
-nav {
-  background-color: #f9f9f9;
-  border-bottom: 1px solid #ddd;
-  padding: 10px 20px;
-}
-  
-nav ul {
-  list-style-type: none;
+.nav-list {
+  list-style: none;
   display: flex;
-  margin: 0;
-  padding: 0;
+  align-items: center;
 }
-  
-nav li {
-  margin-right: 20px;
+.nav-list a {
+  color: #fff;
+  margin-left: 20px;
+  position: relative;
 }
-nav a {
-  color: #333;
-  text-decoration: none;
+.Cart-icon .fas, .nav-list i {
+  font-size: 18px;
 }
-  
-  /*.Cart-icon {
-    display: flex;
-    align-items: center;
-  }
-  
-  input[type="text"] {
-    padding: 5px;
-    margin-right: 10px;
-  }
-  
-  button {
-    padding: 5px 10px;
-    cursor: pointer;
-  }
-  
- /* body {
-  margin: 0; 
-  padding: 0;
-  box-sizing: border-box; 
-  }
-  main {
-  padding-top: 80px; 
-}*/
-  </style>
+</style>
+
   

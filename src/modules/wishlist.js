@@ -20,7 +20,8 @@ export default {
 
    
     REMOVE_FROM_WISHLIST(state, productId) {
-      state.wishlist = state.wishlist.filter(p => p.productId !== productId);
+      console.log('productId=',productId)
+      state.wishlist = state.wishlist.filter(p => p.id !== productId);
       localStorage.setItem('wishlist', JSON.stringify(state.wishlist));
     },
 

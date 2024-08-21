@@ -32,7 +32,7 @@ export default {
       state.cart = state.cart.filter(p => p.productId !== productId);
       localStorage.setItem('cart', JSON.stringify(state.cart));
     },
-    UPDATE_CART_QUANTITY(state, { productId, quantity }) {
+    UPDATE_ITEM_QUANTITY(state, { productId, quantity }) {
       const item = state.cartItems.find((item) => item.productId === productId);
       if (item) {
         item.quantity = quantity;

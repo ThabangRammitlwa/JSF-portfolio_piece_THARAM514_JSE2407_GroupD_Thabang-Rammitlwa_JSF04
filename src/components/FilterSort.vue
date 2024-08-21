@@ -27,7 +27,7 @@ import { useStore } from 'vuex';
 
 /**
  * @typedef {Object} FilterSortProps
- * @property {string[]} categories - Array of available categories
+ * @property {string[]} categories 
  */
 
 /**

@@ -13,7 +13,7 @@ const routes = [
     { path: '/', name: 'Welcome', component: Welcome },
     { path: '/discount', name: 'DiscountCarousel', component: DiscountCarousel },
     { path: '/products', name: 'ProductList', component: ProductList },
-    { path: '/product/', name: 'ProductDetails', component: ProductDetails, props: true },
+    { path: '/product/:id', name: 'ProductDetails', component: ProductDetails, props: true },
     { path: '/login', name: 'Login', component: Login },
     { 
       path: '/cart', name: 'Cart', component: Cart,
